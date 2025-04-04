@@ -11,9 +11,87 @@
         <h1>Greenhouse Gas Emissions: White Hat, Black Hat Visualizations</h1>
 
         <div id="vis"></div> <!--  Will hold our visualization (SVG) -->
+
+        <h4 class="writeup">Black Hat Writeup</h4>
+        <p class="writeup">
+            Several techniques are used in this visualization to intentionally
+            mislead viewers to believe that the United States has a disproportionately
+            strong reduction in greenhouse gas emissions, which is far from the truth.
+        </p>
+        <ul class="writeup">
+            <li>
+                First, the data on emissions reduction is <strong>entirely based on the percent change
+                from 2019 to 2020</strong>, where the pandemic caused large-scale shutdowns and
+                thus, reductions in greenhouse gas emissions by nature. As such, in reality,
+                the United States (nor any other country) really can't take credit for
+                the decrease in emissions, as the pandemic caused them. The visualization
+                does technically show that it is only data from 2019 to 2020, but only in the
+                sideways y-axis label at the very end, which is rather unlikely to be
+                noticed. 
+            </li>
+            <li>
+                Another primary stategy for this was <strong>only including countries
+                that had a much lower reduction in greenhouse gases than the United States</strong> in the visualization, and 
+                excluding all other countries. Hence why the graph only shows 11 countries; these
+                are the United States and the 10 countries that had the worst reductions in greenhouse
+                gases from 2019 to 2020; again, the pandemic is largely to blame for these patterns, 
+                not the policy or efforts of the United States. 
+            </li>
+            <li>
+                Complexity is also used here to intentionally confuse. <strong>There is a line chart and a 
+                bar chart, but only one set of scales shown on the axes.</strong> In reality, the axes show
+                only the bar chart, not the line chart. 
+            </li>
+            <li>
+                <strong>The scale of the y-axis (pertaining to the bar chart) is exponential, not linear.</strong> This makes
+                the United States's 12% reduction look much higher than the next highest's (Russia's) 5%. In the same vein,
+                <strong>the tick values were meticulously chosen</strong> to make it less obvious that it was exponentially scaled, and <strong>the horizontal
+                gridlines are completely unrelated to the data</strong> but make it appear to be a linear scale. 
+            </li>
+            <li>
+                The line chart (though intentionally not explained) shows the emissions values for 2019 as
+                the left endpoints of the lines and the emissions values for 2020 as the right endpoints of the lines
+                per country. <strong>The United States's value is artificially scaled</strong> to make it seem like it's doing much better,
+                though the line chart barely has any sound interpretability (on purpose) at all.
+            </li>
+            <li>
+                More obviously, <strong>the United States is shown as green and the other countries are shown as red</strong>, using semantic relationships
+                of green being good and red being bad. In the same vein, on hover, the USA bar brightens, but the other bars darken,
+                again using the semantic idea that brightening is a good thing and darkening is a bad thing.
+            </li>
+            <li>
+                <strong>The order of the bars is intentional.</strong> It shows all of them in decreasing order, except for the United States
+                at the end. By positioning the United States next to the lowest value, it accentuates the difference between them
+                and makes the United States seem like it is even higher than it is.
+            </li>
+            <li>
+                <strong>Tooltips were intentionally not included</strong> for the hover action, with the idea that it makes the actual numbers
+                as difficult to decipher as possible.
+            </li>
+            <li>
+                <strong>The title of the chart is charged</strong> and is used to plant the biased idea that the graph is trying to show, particularly 
+                that it's trying to falsely convey that the USA leads <em>the entire world</em> when in reality only 10 other countries are shown.
+            </li>
+        </ul>
+
+        <br>
+        <h4>Development Process</h4>
+        <p>This project was completed by Calvin Davis and Adarsa Pedada. The labor was split such that Adarsa was tasked with creating the white hat
+            visualization and the corresponding writeup, and Calvin was tasked with creating the black hat visualization and the corresponding writeup.
+        </p>
+        <br>
+        <p><strong>[white hat visualization dev process/how long it took/aspects that took the most time]</strong></p>
+        <br>
+        <p>The black hat visualization took roughly 6 hours to complete, including data acquisition, writeup, and GitHub configuration. 
+            The line chart was a difficult aspect, as it is more complicated than it seems to plot a multi-line line chart. It took a lot of
+            Googling and reading the D3 docs to sort out how the dataset needed to be formatted before it was passed to the line plotting code.
+            Cleaning and formatting the dataset for the purposes of the black hat visualization also took a while to figure out.
+        </p>
+        <br>
+        <h4>Data Source</h4>
+        <p>Air emissions - Greenhouse gas emissions Inventories. Sourced from National Inventory Submissions 2023 to the United Nations Framework Convention on Climate Change (UNFCCC, CRF tables), 
+            and replies to the OECD State of the Environment Questionnaire and comments from countries. Retrieved from <a href="https://data-explorer.oecd.org/vis?df[ds]=DisseminateFinalDMZ&df[id]=DSD_AIR_GHG%40DF_AIR_GHG&df[ag]=OECD.ENV.EPI&dq=.A.GHG._T.KG_CO2E_PS&pd=2014%2C&to[TIME_PERIOD]=false">data-explorer.oecd.org</a></p>
     </div>
-    
-    
 
     <!-- Load D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>

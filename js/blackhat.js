@@ -7,6 +7,7 @@ const height = 500 - margin.top - margin.bottom;
 const evilThreshold = 7
 let allData = []
 let cleaned = []
+let dataForLineChart = []
 
 function init(){
 
@@ -49,6 +50,24 @@ function init(){
         console.log(onlyWorseThanUSA)
 
         cleaned = onlyWorseThanUSA
+
+        const countryList = [...new Set(onlyWorseThanUSA.map(d => d.country))];
+
+        dataForLineChart = Array.from(rolledup, ([country, { emissions2019, emissions2020 }]) => {
+            if (emissions2019 !== null && emissions2020 !== null) {
+                if (country == "United States") {
+                    // Distort USA data
+                    country = "USA"
+                    return [{ country, "emissions": emissions2019 * 0.4, "year": 2019 }, { country, "emissions": emissions2020 * 1.5, "year": 2020}]
+                } else if (countryList.includes(country)) {
+                    return [{ country, "emissions": emissions2019 * 0.4, "year": 2019 }, { country, "emissions": emissions2020 * 0.4, "year": 2020}]
+                }
+            }
+        }).filter(d => d !== undefined)
+
+        dataForLineChart = [].concat(...dataForLineChart)
+
+        console.log(dataForLineChart)
 
         makeBlackHat()
 
@@ -109,6 +128,14 @@ function makeBlackHat() {
         .style("font-size", "22px")
         .text("USA Leads World in Greenhouse Gas Emissions Reduction")
 
+    let subtitle = svg.append("text")
+        .attr("x", width/2 - (margin.left / 4))
+        .attr("y", 4)
+        .attr("text-anchor", "middle")
+        .style("font-size", "12px")
+        .style("fill", "#777")
+        .text("Hover on any bar to focus corresponding trendline")
+
     const yZero = yScale(0)
 
     svg.append("line")
@@ -144,6 +171,7 @@ function makeBlackHat() {
         .enter()
         .append("rect")
         .attr("class", "bars")
+        .attr("country", d => d.country)
         .attr('x', d => xScale(d.country))
         .attr('y', d => d.change >= 0 ? yScale(d.change) : yZero)
         .attr("width", xScale.bandwidth())
@@ -151,6 +179,74 @@ function makeBlackHat() {
         .attr("fill", d => d.country == "USA" ? "#17af68" : "#af1c17")
         .style("stroke-width", 1)
         .style("stroke", "black")
+        .on("mouseover", function(e, d) {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr("fill", d => d.country == "USA" ? "#21ff97" : "#590e0c")
+
+            svg.selectAll(".line")
+                .filter(line => line.country === d.country)
+                .transition()
+                .duration(200)
+                .attr("stroke", d => d.country == "USA" ? "#21ff97" : "#590e0c")
+                .attr("opacity", "100%")
+
+            svg.selectAll(".line")
+                .filter(line => line.country !== d.country)
+                .transition()
+                .duration(200)
+                .attr("stroke", "#ccc")
+                .attr("opacity", "50%")
+
+            svg.selectAll(".bars")
+                .filter(bar => bar !== d)
+                .transition()
+                .duration(200)
+                .attr("fill", "#ddd")
+        })
+        .on("mouseout", function(e, d) {
+            svg.selectAll(".bars")
+                .transition()
+                .duration(200)
+                .attr("fill", d => d.country == "USA" ? "#17af68" : "#af1c17");
+            
+            svg.selectAll(".line")
+                .transition()
+                .duration(200)
+                .attr("stroke", d => d.country == "USA" ? "#17af68" : "#af1c17")
+                .attr("opacity", "100%")
+        })
+
+    let lineXScale = d3.scaleLinear()
+        .domain([2019, 2020])
+        .range([xScale("Russia") + xScale.bandwidth() / 2, xScale("Türkiye") + xScale.bandwidth() / 2])
+    
+    let lineYScale = d3.scaleLinear()
+        .domain([d3.min(dataForLineChart, d => d.emissions), d3.max(dataForLineChart, d => d.emissions)])
+        .range([yScale(5.5), yScale(12.5)])
+
+    const points = dataForLineChart.map(d => [lineXScale(d.year), lineYScale(d.emissions), d.country]);
+
+    console.log(points);
+
+    const groupedUp = d3.rollup(points, v => Object.assign(v, {country: v[0][2]}), d => d[2]); // Group by country, keeping the country name in the z property
+
+    console.log(groupedUp); // Check the grouped data structure
+
+    // Create a line for each country
+    const line = d3.line()
+    svg.selectAll(".line")
+        .data(groupedUp.values())  // assuming "data" is the array containing the emissions for each country
+        .enter()
+        .append("path")
+        .attr("class", "line")  // class for styling
+        .attr("country", d => d.country)
+        .attr("d", line)  // Generate the line using the line function
+        .attr("stroke", d => d.country === "USA" ? "#17af68" : "#af1c17")  // Color: Green for USA, red for others
+        .attr("fill", "none")  // No fill
+        .attr("stroke-width", 2)  // Set stroke width for visibility
+        .attr("opacity", "100%")
 
 }
 
