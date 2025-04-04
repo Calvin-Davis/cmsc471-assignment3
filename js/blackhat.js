@@ -1,9 +1,9 @@
 
 console.log('D3 Version:', d3.version);
 
-const margin = {top: 60, right: 40, bottom: 60, left: 40};
-const width = 600 - margin.left - margin.right;
-const height = 400 - margin.top - margin.bottom;
+const margin = {top: 60, right: 40, bottom: 60, left: 80};
+const width = 700 - margin.left - margin.right;
+const height = 500 - margin.top - margin.bottom;
 const evilThreshold = 7
 let allData = []
 let cleaned = []
@@ -91,6 +91,7 @@ function makeBlackHat() {
         .attr("y", height + margin.bottom - 20)
         .attr("text-anchor", "middle")
         .attr('class', 'labels')
+        .text("Nation")
 
     let yAxisLabel = svg.append("text")
         .attr("transform", "rotate(-90)")
@@ -98,14 +99,45 @@ function makeBlackHat() {
         .attr("y", -margin.left + 40)
         .attr("text-anchor", "middle")
         .attr('class', 'labels')
+        .attr("id", 'yaxis-label')
+        .text("% Reduction in Greenhouse Gas Emissions, 2019-2020")
 
     let title = svg.append("text")
-        .attr("x", width/2)
-        .attr("y", -40)
+        .attr("x", width/2 - (margin.left / 4))
+        .attr("y", -20)
         .attr("text-anchor", "middle")
-        .style("font-size", "26px")
+        .style("font-size", "22px")
+        .text("USA Leads World in Greenhouse Gas Emissions Reduction")
 
     const yZero = yScale(0)
+
+    svg.append("line")
+        .attr("x1", 0)
+        .attr("x2", width)
+        .attr("y1", yZero)
+        .attr("y2", yZero)
+        .attr("stroke", "black")
+        .attr("stroke-width", 1)
+        //.attr("stroke-dasharray", "4 4");
+
+    const numGridLines = 12;
+    const yRange = yScale.range();
+    const fakeGridPositions = d3.range(numGridLines).map(i => {
+        return yRange[0] - (i * (yRange[0] - yRange[1]) / (numGridLines - 1));
+    });
+
+    svg.selectAll(".fake-grid-line")
+        .data(fakeGridPositions)
+        .enter()
+        .append("line")
+        .attr("class", "fake-grid-line")
+        .attr("x1", 0)
+        .attr("x2", width)  // Make lines span the whole width
+        .attr("y1", d => d)
+        .attr("y2", d => d)
+        .attr("stroke", "#ccc")  // Light gray color for subtlety
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", "4,4"); // Dashed lines to mimic normal grid lines
 
     svg.selectAll("rect")
         .data(cleaned)
@@ -117,6 +149,8 @@ function makeBlackHat() {
         .attr("width", xScale.bandwidth())
         .attr("height", d => Math.abs(yScale(d.change) - yZero))
         .attr("fill", d => d.country == "USA" ? "#17af68" : "#af1c17")
+        .style("stroke-width", 1)
+        .style("stroke", "black")
 
 }
 

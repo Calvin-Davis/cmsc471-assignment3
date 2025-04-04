@@ -59,3 +59,7 @@ button {
     display: inline-block;
     border-radius: 20px;
 }
+
+#yaxis-label {
+    font-size: 14px;
+}
