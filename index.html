@@ -11,6 +11,8 @@
         <h1>Greenhouse Gas Emissions: White Hat, Black Hat Visualizations</h1>
 
         <div id="vis"></div> <!--  Will hold our visualization (SVG) -->
+        <select id="country-dropdown"></select>
+        <div id="country-vis"></div> <!--  Will hold our visualization (SVG) -->
 
         <h4 class="writeup">Black Hat Writeup</h4>
         <p class="writeup">
@@ -74,13 +76,35 @@
             </li>
         </ul>
 
+        <h4 class="writeup">White Hat Writeup</h4>
+        <p class="writeup">
+            We used the greenhouse gas emissions dataset. The dataset presents trends of major
+            greenhouse gases and emissions. It has data for various reference areas throughout a span of various years.
+
+            One way to visualize the data was to show how each reference area trended with the emissions of greenhouse gasses.
+            Rather than having a side by side comparison of two places, I chose to have a dropdown to view every single country. 
+            For readability, the emissions were rounded to one decimal place and placed on top of the bar. Hovering over the bar 
+            graph will give full details about that year. This was done using a tool tip. 
+
+            To ensure clarity for the visualization, I picked colors that would contrast with each other and are easy to read. 
+            The bars are in blue, and when someone hovers over a bar, that bar turns green, and the rest of the bars turn into 
+            a neutral gray color. The axes are also labeled with the appropriate years and amount of emissions released. 
+            The visualization is also 100% accurate as it is displaying a certain reference area’s data. The data is not being 
+            modified and is not being compared to anything, ensuring that there is no bias. 
+
+
+
+        </p>
+
         <br>
         <h4>Development Process</h4>
         <p>This project was completed by Calvin Davis and Adarsa Pedada. The labor was split such that Adarsa was tasked with creating the white hat
             visualization and the corresponding writeup, and Calvin was tasked with creating the black hat visualization and the corresponding writeup.
         </p>
         <br>
-        <p><strong>[white hat visualization dev process/how long it took/aspects that took the most time]</strong></p>
+        <p>The white hat visualization took about 5 hours to complete. This time includes the entire process including the writeups. The most 
+            difficult aspect was creating the tool tip and deciding what to include in it. It took several attempts to find out how much information to add 
+            to keep the graph visually appealing but easy to read as well.</p>
         <br>
         <p>The black hat visualization took roughly 6 hours to complete, including data acquisition, writeup, and GitHub configuration. 
             The line chart was a difficult aspect, as it is more complicated than it seems to plot a multi-line line chart. It took a lot of
@@ -97,5 +121,6 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <!-- <script src="js/script.js"></script> -->
     <script src="js/blackhat.js"></script>
+    <script src="js/whitehat.js"></script>
 </body>
 </html>
